@@ -1,0 +1,14 @@
+<mujoco model="fairino5_v6_right_specific_config">
+  <contact>
+    <pair geom1="right/geom_0_" geom2="right/geom_1_" name="right/base_shoulder" condim="1"/>
+  </contact>
+
+  <actuator>
+    <general name="right/act1" joint="right/j1" class="size1" ctrlrange="-3.0543 3.0543" gainprm="150" biasprm="0 -150 -400"/>
+    <general name="right/act2" joint="right/j2" class="size1" ctrlrange="-4.6251 1.4835" gainprm="700" biasprm="0 -700 -450"/>
+    <general name="right/act3" joint="right/j3" class="size2" ctrlrange="-2.8274 2.8274" gainprm="200" biasprm="0 -200 -200"/>
+    <general name="right/act4" joint="right/j4" class="size2" ctrlrange="-4.6251 1.4835" gainprm="23" biasprm="0 -23 -23"/>
+    <general name="right/act5" joint="right/j5" class="size3" ctrlrange="-3.0543 3.0543" gainprm="23" biasprm="0 -23 -23"/>
+    <general name="right/act6" joint="right/j6" class="size3" ctrlrange="-3.0543 3.0543" gainprm="23" biasprm="0 -23 -23"/>
+  </actuator>
+</mujoco>

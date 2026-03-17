@@ -1,0 +1,94 @@
+<mujoco model="fairino5_v6_config">
+  <compiler angle="radian" autolimits="true" meshdir="../../assets/meshes"/>
+
+  <option timestep="0.001" integrator="implicitfast"/>
+
+  <size nkey="1"/>
+
+  <asset>
+    <mesh file="fairino5_v6/base_link.STL"/>
+    <mesh file="fairino5_v6/shoulder_link.STL"/>
+    <mesh file="fairino5_v6/upperarm_link.STL"/>
+    <mesh file="fairino5_v6/forearm_link.STL"/>
+    <mesh file="fairino5_v6/wrist1_link.STL"/>
+    <mesh file="fairino5_v6/wrist2_link.STL"/>
+    <mesh file="fairino5_v6/wrist3_link.STL"/>
+  </asset>
+
+  <default>
+    <default class="fairino5_v6">
+      <geom type="mesh" density="0" group="2"/>
+      <joint axis="0 0 1"/>
+      <general biastype="affine"/>
+
+      <default class="size1">
+        <joint damping="10"/>
+      </default>
+
+      <default class="size2">
+        <joint damping="8"/>
+      </default>
+
+      <default class="size3">
+        <joint damping="3"/>
+      </default>
+
+      <site size="0.001" rgba="1 0 0 1" group="4"/>
+    </default>
+  </default>
+
+  <contact>
+    <pair geom1="geom_0_" geom2="geom_1_" name="base_shoulder" condim="1"/>
+  </contact>
+
+  <actuator>
+    <general
+      name="act1"
+      joint="j1"
+      class="size1"
+      ctrlrange="-3.0543 3.0543"
+      gainprm="150"
+      biasprm="0 -150 -400"
+    />
+    <general
+      name="act2"
+      joint="j2"
+      class="size1"
+      ctrlrange="-4.6251 1.4835"
+      gainprm="700"
+      biasprm="0 -700 -450"
+    />
+    <general
+      name="act3"
+      joint="j3"
+      class="size2"
+      ctrlrange="-2.8274 2.8274"
+      gainprm="200"
+      biasprm="0 -200 -200"
+    />
+    <general
+      name="act4"
+      joint="j4"
+      class="size2"
+      ctrlrange="-4.6251 1.4835"
+      gainprm="23"
+      biasprm="0 -23 -23"
+    />
+    <general
+      name="act5"
+      joint="j5"
+      class="size3"
+      ctrlrange="-3.0543 3.0543"
+      gainprm="23"
+      biasprm="0 -23 -23"
+    />
+    <general
+      name="act6"
+      joint="j6"
+      class="size3"
+      ctrlrange="-3.0543 3.0543"
+      gainprm="23"
+      biasprm="0 -23 -23"
+    />
+  </actuator>
+</mujoco>
