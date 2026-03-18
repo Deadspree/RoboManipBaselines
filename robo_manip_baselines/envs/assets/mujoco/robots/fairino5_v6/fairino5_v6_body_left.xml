@@ -114,7 +114,7 @@
                   <site name="left/attachment_site" group="5" pos="0 0 0.102"/>
 
                   <!-- gripper: robotiq_2f85 -->
-                  <body name="left/base_mount" pos="0 0 0.102" quat="-1 1 0 0" childclass="2f85">
+                  <body name="left/base_mount" pos="0 0 0.092" quat="0.70710678 0 0 -0.70710678" childclass="2f85">
                     <site name="left/force_sensor" type="box" group="5" size="0.005 0.005 0.01" rgba="0.6 0.1 0.1 1"/>
                     <geom class="gripper_visual" mesh="base_mount" material="gripper_black"/>
                     <geom class="gripper_collision" mesh="base_mount"/>
