@@ -23,8 +23,8 @@ class MujocoFR5DualEnvBase(MujocoEnvBase):
     }
     observation_space = Dict(
         {
-            "joint_pos": Box(low=-np.inf, high=np.inf, shape=(12,), dtype=np.float64),
-            "joint_vel": Box(low=-np.inf, high=np.inf, shape=(12,), dtype=np.float64),
+            "joint_pos": Box(low=-np.inf, high=np.inf, shape=(14,), dtype=np.float64),
+            "joint_vel": Box(low=-np.inf, high=np.inf, shape=(14,), dtype=np.float64),
             "wrench": Box(low=-np.inf, high=np.inf, shape=(12,), dtype=np.float64),
         }
     )
@@ -43,11 +43,11 @@ class MujocoFR5DualEnvBase(MujocoEnvBase):
                 arm_root_pose=self.get_body_pose("left/fairino5_v6_root_frame"),
                 ik_eef_joint_id=6,
                 arm_joint_idxes=np.arange(0, 6),
-                gripper_joint_idxes=np.array([], dtype=np.int_),
-                gripper_joint_idxes_in_gripper_joint_pos=np.array([], dtype=np.int_),
+                gripper_joint_idxes=np.array([6]),
+                gripper_joint_idxes_in_gripper_joint_pos=np.array([0]),
                 eef_idx=0,
                 init_arm_joint_pos=self.init_qpos[0:6],
-                init_gripper_joint_pos=np.zeros(0, dtype=np.float64),
+                init_gripper_joint_pos=np.zeros(1),
             ),
             ArmConfig(
                 arm_urdf_path=path.join(
@@ -55,12 +55,12 @@ class MujocoFR5DualEnvBase(MujocoEnvBase):
                 ),
                 arm_root_pose=self.get_body_pose("right/fairino5_v6_root_frame"),
                 ik_eef_joint_id=6,
-                arm_joint_idxes=np.arange(6, 12),
-                gripper_joint_idxes=np.array([], dtype=np.int_),
-                gripper_joint_idxes_in_gripper_joint_pos=np.array([], dtype=np.int_),
+                arm_joint_idxes=np.arange(7, 13),
+                gripper_joint_idxes=np.array([13]),
+                gripper_joint_idxes_in_gripper_joint_pos=np.array([1]),
                 eef_idx=1,
-                init_arm_joint_pos=self.init_qpos[6:12],
-                init_gripper_joint_pos=np.zeros(0, dtype=np.float64),
+                init_arm_joint_pos=self.init_qpos[14:20],
+                init_gripper_joint_pos=np.zeros(1),
             ),
         ]
 
@@ -102,6 +102,12 @@ class MujocoFR5DualEnvBase(MujocoEnvBase):
 
     def _get_obs_single_arm(self, left_right):
         arm_joint_name_list = ["j1", "j2", "j3", "j4", "j5", "j6"]
+        gripper_joint_name_list = [
+            "right_driver_joint",
+            "right_spring_link_joint",
+            "left_driver_joint",
+            "left_spring_link_joint",
+        ]
 
         arm_joint_pos = np.array(
             [self.data.joint(left_right + "/" + jn).qpos[0] for jn in arm_joint_name_list]
@@ -109,6 +115,21 @@ class MujocoFR5DualEnvBase(MujocoEnvBase):
         arm_joint_vel = np.array(
             [self.data.joint(left_right + "/" + jn).qvel[0] for jn in arm_joint_name_list]
         )
+
+        gripper_qpos = np.array(
+            [
+                self.data.joint(left_right + "/" + joint_name).qpos[0]
+                for joint_name in gripper_joint_name_list
+            ]
+        )
+        gripper_qvel = np.array(
+            [
+                self.data.joint(left_right + "/" + joint_name).qvel[0]
+                for joint_name in gripper_joint_name_list
+            ]
+        )
+        gripper_joint_pos = np.rad2deg(gripper_qpos.mean(keepdims=True)) / 45.0 * 255.0
+        gripper_joint_vel = np.rad2deg(gripper_qvel.mean(keepdims=True)) / 45.0 * 255.0
 
         # If F/T sensor is not mounted yet, keep wrench as zeros.
         try:
@@ -119,7 +140,11 @@ class MujocoFR5DualEnvBase(MujocoEnvBase):
             wrench = np.zeros(6, dtype=np.float64)
 
         return {
-            "joint_pos": arm_joint_pos.astype(np.float64),
-            "joint_vel": arm_joint_vel.astype(np.float64),
+            "joint_pos": np.concatenate(
+                (arm_joint_pos, gripper_joint_pos), dtype=np.float64
+            ),
+            "joint_vel": np.concatenate(
+                (arm_joint_vel, gripper_joint_vel), dtype=np.float64
+            ),
             "wrench": wrench,
         }

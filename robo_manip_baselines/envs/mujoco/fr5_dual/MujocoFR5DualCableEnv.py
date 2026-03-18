@@ -24,7 +24,7 @@ class MujocoFR5DualCableEnv(MujocoFR5DualEnvBase):
                     -0.8 * np.pi,
                     -np.pi / 2,
                     -np.pi / 2,
-                   #*np.zeros(8),
+                   *np.zeros(8),
                     # right
                     0.1 * np.pi,
                     -0.6 * np.pi,
@@ -32,7 +32,7 @@ class MujocoFR5DualCableEnv(MujocoFR5DualEnvBase):
                     -0.8 * np.pi,
                     -np.pi / 2,
                     -np.pi / 2,
-                   # *np.zeros(8),
+                   *np.zeros(8),
                 ]
             ),
             **kwargs,
